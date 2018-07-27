@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="vip.mystery0.bottomTabView" />
+<manifest package="vip.mystery0.bottomTabView" />

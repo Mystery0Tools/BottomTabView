@@ -2,73 +2,148 @@ package vip.mystery0.bottomTabView
 
 import android.content.Context
 import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.widget.ImageView
+import android.view.View
+import android.widget.FrameLayout
 import android.widget.LinearLayout
-
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import vip.mystery0.bottomTabView.util.DensityTools
 
 class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
 	private val inflater: LayoutInflater = LayoutInflater.from(context)
-	val menuInflater = MenuInflater(context)
-
-	private var menu: Menu? = null
-	//	var selectedColor: Int
-	private var itemTextSize = 24f
+	var list: List<BottomTabItem>? = null
+	var config = BottomTabViewConfig()
+	var currentItem = 0
+		private set
+	var onItemSelectedListener: OnItemSelectedListener? = null
 
 	constructor(context: Context) : this(context, null)
 	constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
 	init {
+		config.itemIconSize = DensityTools.dp2px(context, config.itemIconSize.toFloat())
 		val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BottomTabView)
-		if (typedArray.hasValue(R.styleable.BottomTabView_menu)) {
-			val menuRes = typedArray.getInteger(R.styleable.BottomTabView_menu, 0)
-			menu = BottomTabViewMenu()
-			menuInflater.inflate(menuRes, menu)
-		}
+		if (typedArray.hasValue(R.styleable.BottomTabView_selected_color))
+			config.selectedColor = typedArray.getColor(R.styleable.BottomTabView_selected_color, config.selectedColor)
+		if (typedArray.hasValue(R.styleable.BottomTabView_unselected_color))
+			config.unSelectedColor = typedArray.getColor(R.styleable.BottomTabView_unselected_color, config.unSelectedColor)
+		if (typedArray.hasValue(R.styleable.BottomTabView_margin_top))
+			config.marginTop = typedArray.getDimension(R.styleable.BottomTabView_margin_top, config.marginTop)
+		if (typedArray.hasValue(R.styleable.BottomTabView_margin_bottom))
+			config.marginBottom = typedArray.getDimension(R.styleable.BottomTabView_margin_bottom, config.marginBottom)
+		if (typedArray.hasValue(R.styleable.BottomTabView_item_text_size))
+			config.itemTextSize = typedArray.getDimension(R.styleable.BottomTabView_item_text_size, config.itemTextSize)
 		typedArray.recycle()
 
-
-		addView(createImageView(drawBitmap(0, "1")))
-		addView(createImageView(drawBitmap(1, "222")))
-		addView(createImageView(drawBitmap(2, "第三个")))
+		orientation = LinearLayout.HORIZONTAL
+		minimumHeight = 24
 	}
 
-	private fun drawBitmap(position: Int, text: String): Bitmap {
-		val menuItem = menu!!.getItem(position)
-		val drawable = menuItem.icon
-		val width = drawable.intrinsicWidth
-		val height = drawable.intrinsicHeight
-		val config = if (drawable.opacity != PixelFormat.OPAQUE)
-			Bitmap.Config.ARGB_8888
-		else
-			Bitmap.Config.RGB_565
-		val bitmap = Bitmap.createBitmap(width, height, config)
-		val drawBitmap = Bitmap.createBitmap(height + itemTextSize.toInt(), width, Bitmap.Config.ARGB_8888)
-		val canvas = Canvas(drawBitmap)
-		val bitmapPaint = Paint()
-		bitmapPaint.color = Color.BLACK
-		canvas.drawBitmap(bitmap, 0f, 0f, bitmapPaint)
-		val textPaint = Paint()
-		textPaint.textSize = itemTextSize
-		textPaint.style = Paint.Style.FILL
-		textPaint.textAlign = Paint.Align.CENTER
-		val fontMetrics = textPaint.fontMetrics
-		val top = fontMetrics.top
-		val bottom = fontMetrics.bottom
-		val baseLineX = width / 2f
-		val baseLineY = height + itemTextSize / 2 - top / 2 - bottom / 2
-		canvas.drawText(text, baseLineX, baseLineY, textPaint)
-		return drawBitmap
+	fun setCheckedItem(index: Int) {
+		if (index !in 0..childCount)
+			throw NullPointerException("index must be less than $childCount")
+		val oldIndex = currentItem
+		val newIndex = index
+		val oldBottomTabItem = list!![oldIndex]
+		val newBottomTabItem = list!![newIndex]
+		oldBottomTabItem.isChecked = false
+		newBottomTabItem.isChecked = true
+		val oldTextView = getChildAt(oldIndex).findViewById<TextView>(R.id.textView)
+		oldTextView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(oldBottomTabItem), null, null)
+		oldTextView.setTextColor(config.unSelectedColor)
+		val newTextView = getChildAt(newIndex).findViewById<TextView>(R.id.textView)
+		newTextView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(newBottomTabItem), null, null)
+		newTextView.setTextColor(config.selectedColor)
+		currentItem = index
 	}
 
-	private fun createImageView(bitmap: Bitmap): ImageView {
-		val imageView = ImageView(context)
-		imageView.setImageBitmap(bitmap)
-		val layoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
-		imageView.layoutParams = layoutParams
-		return imageView
+	fun setConfig(config: BottomTabViewConfig): BottomTabView {
+		this.config = config
+		return this
+	}
+
+	fun setMenuList(list: List<BottomTabItem>): BottomTabView {
+		this.list = list
+		return this
+	}
+
+	fun setOnItemSelectedListener(listener: (BottomTabItem) -> Unit) {
+		onItemSelectedListener = object : OnItemSelectedListener {
+			override fun onItemSelected(bottomTabItem: BottomTabItem) {
+				listener.invoke(bottomTabItem)
+			}
+		}
+	}
+
+	fun init() {
+		updateView()
+		setCheckedItem(currentItem)
+	}
+
+	private fun updateView() {
+		list?.forEach {
+			addView(createItemView(it))
+		}
+	}
+
+	private fun drawDrawable(bottomTabItem: BottomTabItem): Drawable? {
+		val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
+		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
+		val canvas = Canvas(bitmap)
+		drawable.setBounds(0, 0, canvas.width, canvas.height)
+		drawable.draw(canvas)
+
+		val imageBitmap = Bitmap.createBitmap(config.itemIconSize, config.itemIconSize, Bitmap.Config.ARGB_8888)
+		val colorCanvas = Canvas(imageBitmap)
+		colorCanvas.saveLayer(0f, 0f, config.itemIconSize.toFloat(), config.itemIconSize.toFloat(), null, Canvas.ALL_SAVE_FLAG)
+		val bitmapShader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+		val paint = Paint()
+		paint.shader = bitmapShader
+		colorCanvas.scale(canvas.width.toFloat() / config.itemIconSize.toFloat(), canvas.height.toFloat() / config.itemIconSize.toFloat(), config.itemIconSize.toFloat(), config.itemIconSize.toFloat())
+		colorCanvas.drawBitmap(bitmap, 0f, 0f, paint)
+		paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
+		val linearGradient = LinearGradient(0f, config.itemIconSize / 2f, config.itemIconSize.toFloat(), config.itemIconSize / 2f, Color.CYAN, Color.GREEN, Shader.TileMode.CLAMP)
+		paint.shader = linearGradient
+		colorCanvas.drawBitmap(bitmap, 0f, 0f, paint)
+		paint.xfermode = null
+		colorCanvas.restore()
+		bitmap.recycle()
+		return BitmapDrawable(imageBitmap)
+	}
+
+	private fun createItemView(bottomTabItem: BottomTabItem): View {
+		val itemView = inflater.inflate(R.layout.layout_bottom_tab_item, null)
+		val line = itemView.findViewById<View>(R.id.line)
+		line.setBackgroundColor(config.lineColor)
+		val lineLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, config.lineHeight)
+		line.layoutParams = lineLayoutParams
+		val frameLayoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+		itemView.layoutParams = frameLayoutParams
+		val textView = itemView.findViewById<TextView>(R.id.textView)
+		textView.text = bottomTabItem.name
+		textView.textSize = config.itemTextSize
+		textView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(bottomTabItem), null, null)
+		val textViewLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
+		textViewLayoutParams.setMargins(0, DensityTools.dp2px(context, config.marginTop), 0, DensityTools.dp2px(context, config.marginBottom))
+		textViewLayoutParams.gravity = Gravity.CENTER
+		textView.layoutParams = textViewLayoutParams
+		textView.gravity = Gravity.CENTER
+		itemView.setOnClickListener {
+			val position = indexOfChild(it)
+			if (!list!![position].isChecked) {
+				setCheckedItem(position)
+				onItemSelectedListener?.onItemSelected(bottomTabItem)
+			}
+		}
+		return itemView
+	}
+
+	interface OnItemSelectedListener {
+		fun onItemSelected(bottomTabItem: BottomTabItem)
 	}
 }

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<declare-styleable name="BottomTabView">
-		<attr name="menu" format="reference" />
 		<attr name="selected_color" format="reference|color" />
 		<attr name="unselected_color" format="reference|color" />
+		<attr name="margin_top" format="dimension" />
+		<attr name="margin_bottom" format="dimension" />
+		<attr name="item_text_size" format="dimension" />
 	</declare-styleable>
 </resources>
