@@ -1,5 +1,5 @@
 ## BottomTabView
-[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/releases)![GitHub Release Date](https://img.shields.io/github/release-date/Mystery0Tools/BottomTabView.svg)[![JitPack](https://img.shields.io/jitpack/v/Mystery0Tools/BottomTabView.svg)](https://jitpack.io/#Mystery0Tools/BottomTabView)
+[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/releases) ![GitHub Release Date](https://img.shields.io/github/release-date/Mystery0Tools/BottomTabView.svg) [![JitPack](https://img.shields.io/jitpack/v/Mystery0Tools/BottomTabView.svg)](https://jitpack.io/#Mystery0Tools/BottomTabView)
 
 
 **README：[中文](https://github.com/Mystery0Tools/BottomTabView/blob/master/README.MD "中文") | [English](https://github.com/Mystery0Tools/BottomTabView/blob/master/README_EN.MD "English")**
