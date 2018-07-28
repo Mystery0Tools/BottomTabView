@@ -37,8 +37,11 @@
 	</dependency>
 ```
 具体版本号请通过[Relase页面](https://github.com/Mystery0Tools/BottomTabView/releases "Relase页面")获取
+
 ###具体效果
+![](https://github.com/Mystery0Tools/BottomTabView/blob/master/resource/preview.gif)
 ### 如何使用
+
 #### 往您的布局文件中添加控件
 ```xml
 <vip.mystery0.bottomTabView.BottomTabView
@@ -46,12 +49,14 @@
 	android:layout_width="wrap_content"
 	android:layout_height="wrap_content" />
 ```
+
 #### 配置属性
 获取控件实例：
 ```java
 BottomTabView bottomTabView = findViewById(R.id.bottomTabView);
 ```
 除了设置菜单项和设置当前选中的项，其他的自定义配置都通过[BottomTabViewConfig类](https://github.com/Mystery0Tools/BottomTabView/blob/master/bottomTabView/src/main/java/vip/mystery0/bottomTabView/BottomTabViewConfig.kt "BottomTabViewConfig类")定义。
+
 #### 构建菜单项
 ```java
 List<BottomTabItem> menuList = new ArrayList<>();
@@ -61,11 +66,13 @@ menuList.add(new BottomTabItem("33133", R.drawable.ic_android_black_24dp));
 ```
 菜单项必须是 BottomTabItem 类的对象，对应的构造函数传入的是现在的菜单名称和显示的 drawable 资源。
 构造函数的第二个参数必须是 drawable 的资源引用，必须是矢量图资源（用于着色）。
+
 #### 设置菜单项
 ```java
 bottomTabView.setMenuList(menuList).init();
 ```
 需要在设置之后调用一次 init 方法更新视图。
+
 #### 自定义配置
 ```java
 bottomTabView.setConfig(BottomTabViewConfig()
@@ -81,6 +88,7 @@ bottomTabView.setConfig(BottomTabViewConfig()
 	.setGradientColors(new int[]{Color.WHITE, Color.BLACK}))//设置渐变颜色数组
 	.init();//更新视图
 ```
+
 #### 自定义属性
 | 属性  | 值类型  | 说明 |
 | :------------: | :------------: | :------------: |
@@ -97,6 +105,7 @@ bottomTabView.setConfig(BottomTabViewConfig()
 ```java
 bottomTabView.setCheckedItem(2);
 ```
+
 #### 设置菜单项点击监听
 ```java
 bottomTabView.setOnItemSelectedListener(new BottomTabView.OnItemSelectedListener() {
@@ -106,6 +115,7 @@ bottomTabView.setOnItemSelectedListener(new BottomTabView.OnItemSelectedListener
 	}
 });
 ```
+
 ## LICENSE
     Copyright (C) 2018 Mystery0.
 
