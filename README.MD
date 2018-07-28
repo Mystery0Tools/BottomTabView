@@ -2,7 +2,7 @@
 [![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/releases)![GitHub Release Date](https://img.shields.io/github/release-date/Mystery0Tools/BottomTabView.svg)[![JitPack](https://img.shields.io/jitpack/v/Mystery0Tools/BottomTabView.svg)](https://jitpack.io/#Mystery0Tools/BottomTabView)
 
 
-**README：中文 | English**
+**README：[中文](https://github.com/Mystery0Tools/BottomTabView/blob/master/README.MD "中文") | [English](https://github.com/Mystery0Tools/BottomTabView/blob/master/README_EN.MD "English")**
 ### Download
 通过Gradle集成：将以下代码添加进您的项目级的Build.gradle最后：
 ```groovy
@@ -42,9 +42,9 @@
 #### 往您的布局文件中添加控件
 ```xml
 <vip.mystery0.bottomTabView.BottomTabView
-		android:id="@+id/bottomTabView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" />
+	android:id="@+id/bottomTabView"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content" />
 ```
 #### 配置属性
 获取控件实例：
@@ -69,17 +69,17 @@ bottomTabView.setMenuList(menuList).init();
 #### 自定义配置
 ```java
 bottomTabView.setConfig(BottomTabViewConfig()
-				.setSelectedColor(Color.BLACK)//设置选中的条目颜色
-				.setUnSelectedColor(Color.BLUE)//设置未选中条目颜色
-				.setMarginTop(16f)//设置距离顶部间距，单位dp
-				.setMarginBottom(24f)//设置距离底部间距，单位dp
-				.setItemIconSize(24f)//设置图标大小，单位dp
-				.setItemTextSize(24f)//设置文字大小，单位sp
-				.setLineHeight(1f)//设置顶部分割线高度，单位px
-				.isShowRipple(true)//是否显示点击时水波效果
-				.isShowGradientColors(false)//是否显示渐变图标（需要设置渐变的颜色数组）
-				.setGradientColors(new int[]{Color.WHITE, Color.BLACK}))//设置渐变颜色数组
-				.init();//更新视图
+	.setSelectedColor(Color.BLACK)//设置选中的条目颜色
+	.setUnSelectedColor(Color.BLUE)//设置未选中条目颜色
+	.setMarginTop(16f)//设置距离顶部间距，单位dp
+	.setMarginBottom(24f)//设置距离底部间距，单位dp
+	.setItemIconSize(24f)//设置图标大小，单位dp
+	.setItemTextSize(24f)//设置文字大小，单位sp
+	.setLineHeight(1f)//设置顶部分割线高度，单位px
+	.isShowRipple(true)//是否显示点击时水波效果
+	.isShowGradientColors(false)//是否显示渐变图标（需要设置渐变的颜色数组）
+	.setGradientColors(new int[]{Color.WHITE, Color.BLACK}))//设置渐变颜色数组
+	.init();//更新视图
 ```
 #### 自定义属性
 | 属性  | 值类型  | 说明 |
@@ -100,11 +100,11 @@ bottomTabView.setCheckedItem(2);
 #### 设置菜单项点击监听
 ```java
 bottomTabView.setOnItemSelectedListener(new BottomTabView.OnItemSelectedListener() {
-			@Override
-			public void onItemSelected(@NotNull BottomTabItem bottomTabItem) {
-				//Do Something you want to do
-			}
-		});
+	@Override
+	public void onItemSelected(@NotNull BottomTabItem bottomTabItem) {
+		//Do Something you want to do
+	}
+});
 ```
 ## LICENSE
     Copyright (C) 2018 Mystery0.
