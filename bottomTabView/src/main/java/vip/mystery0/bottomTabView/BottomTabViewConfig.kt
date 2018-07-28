@@ -11,12 +11,16 @@ class BottomTabViewConfig {
 
 	var marginTop: Float = 8f
 	var marginBottom: Float = 8f
-	var itemTextSize = 14f
-	var itemIconSize = 24
+	var itemTextSize = 14f//单位sp
+	var itemIconSize = 24//单位dp
 
-	var lineHeight = 1
+	var lineHeight = 1//单位px
 	@ColorInt
 	var lineColor = Color.parseColor("#e5e5e5")
+	@ColorInt
+	var gradientColors: IntArray = intArrayOf(Color.BLUE, Color.GREEN)
+
+	var isRippleShow = true//是否显示水波效果
 
 	fun setSelectedColor(@ColorInt selectedColor: Int): BottomTabViewConfig {
 		this.selectedColor = selectedColor
@@ -50,6 +54,13 @@ class BottomTabViewConfig {
 
 	fun setItemIconSize(itemIconSize: Int): BottomTabViewConfig {
 		this.itemIconSize = itemIconSize
+		return this
+	}
+
+	fun setGradientColors(gradientColors: IntArray): BottomTabViewConfig {
+		if (gradientColors.size<2)
+			throw NumberFormatException("color size must be more than 1")
+		this.gradientColors = gradientColors
 		return this
 	}
 }

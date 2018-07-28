@@ -12,6 +12,7 @@ import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import vip.mystery0.bottomTabView.util.DensityTools
 
 class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
@@ -26,7 +27,6 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 	constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
 
 	init {
-		config.itemIconSize = DensityTools.dp2px(context, config.itemIconSize.toFloat())
 		val typedArray = context.obtainStyledAttributes(attrs, R.styleable.BottomTabView)
 		if (typedArray.hasValue(R.styleable.BottomTabView_selected_color))
 			config.selectedColor = typedArray.getColor(R.styleable.BottomTabView_selected_color, config.selectedColor)
@@ -92,32 +92,31 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 	}
 
 	private fun drawDrawable(bottomTabItem: BottomTabItem): Drawable? {
+		if (!bottomTabItem.isChecked) {
+			val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
+			DrawableCompat.setTint(drawable.mutate(), config.unSelectedColor)
+			return drawable
+		}
+		val size = DensityTools.dp2px(context, config.itemIconSize.toFloat())
 		val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
 		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
 		drawable.setBounds(0, 0, canvas.width, canvas.height)
 		drawable.draw(canvas)
-
-		val imageBitmap = Bitmap.createBitmap(config.itemIconSize, config.itemIconSize, Bitmap.Config.ARGB_8888)
-		val colorCanvas = Canvas(imageBitmap)
-		colorCanvas.saveLayer(0f, 0f, config.itemIconSize.toFloat(), config.itemIconSize.toFloat(), null, Canvas.ALL_SAVE_FLAG)
 		val bitmapShader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+		//创建线性着色器并配置着色
+		val linearGradient = LinearGradient(size / 2f, 0f, size / 2f, size.toFloat(), config.gradientColors, null, Shader.TileMode.CLAMP)
+		val composeShader = ComposeShader(bitmapShader, linearGradient, PorterDuff.Mode.MULTIPLY)
 		val paint = Paint()
-		paint.shader = bitmapShader
-		colorCanvas.scale(canvas.width.toFloat() / config.itemIconSize.toFloat(), canvas.height.toFloat() / config.itemIconSize.toFloat(), config.itemIconSize.toFloat(), config.itemIconSize.toFloat())
-		colorCanvas.drawBitmap(bitmap, 0f, 0f, paint)
-		paint.xfermode = PorterDuffXfermode(PorterDuff.Mode.MULTIPLY)
-		val linearGradient = LinearGradient(0f, config.itemIconSize / 2f, config.itemIconSize.toFloat(), config.itemIconSize / 2f, Color.CYAN, Color.GREEN, Shader.TileMode.CLAMP)
-		paint.shader = linearGradient
-		colorCanvas.drawBitmap(bitmap, 0f, 0f, paint)
-		paint.xfermode = null
-		colorCanvas.restore()
-		bitmap.recycle()
-		return BitmapDrawable(imageBitmap)
+		paint.shader = composeShader
+		canvas.drawRect(0f, 0f, size.toFloat(), size.toFloat(), paint)
+		return BitmapDrawable(context.resources, bitmap)
 	}
 
 	private fun createItemView(bottomTabItem: BottomTabItem): View {
 		val itemView = inflater.inflate(R.layout.layout_bottom_tab_item, null)
+		if (!config.isRippleShow)
+			itemView.background = null
 		val line = itemView.findViewById<View>(R.id.line)
 		line.setBackgroundColor(config.lineColor)
 		val lineLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, config.lineHeight)
