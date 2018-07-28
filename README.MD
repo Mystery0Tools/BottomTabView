@@ -38,7 +38,7 @@
 ```
 具体版本号请通过[Relase页面](https://github.com/Mystery0Tools/BottomTabView/releases "Relase页面")获取
 
-###具体效果
+### 具体效果
 ![](https://github.com/Mystery0Tools/BottomTabView/blob/master/resource/preview.gif)
 ### 如何使用
 
