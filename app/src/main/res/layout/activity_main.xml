@@ -7,6 +7,7 @@
 	tools:context=".MainActivity">
 
 	<TextView
+		android:id="@+id/textView2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:text="Hello World!"
@@ -23,5 +24,15 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:selected_color="@color/colorAccent"
 		app:unselected_color="@color/colorPrimary" />
+
+	<Button
+		android:id="@+id/button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Button"
+		app:layout_constraintBottom_toTopOf="@+id/bottomTabView"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
