@@ -24,7 +24,7 @@ class MainActivity : AppCompatActivity() {
 				BottomTabItem("12", R.drawable.ic_android_black_24dp),
 				BottomTabItem("33133", R.drawable.ic_android_black_24dp)
 		)
-		bottomTabView.setConfig(BottomTabViewConfig()
+		bottomTabView.config
 				.setSelectedColor(Color.BLACK)
 				.setUnSelectedColor(Color.BLUE)
 				.setMarginTop(16f)
@@ -34,9 +34,9 @@ class MainActivity : AppCompatActivity() {
 				.setLineHeight(1f)
 				.isShowRipple(true)
 				.isShowGradientColors(false)
-				.setGradientColors(intArrayOf(Color.WHITE, Color.BLACK)))
-				.init()
-		bottomTabView.setMenuList(menuList).init()
+				.setGradientColors(intArrayOf(Color.WHITE, Color.BLACK))
+		bottomTabView.init()
+		bottomTabView.setMenuList(menuList)
 		bottomTabView.setOnItemSelectedListener {
 			println(it.name)
 		}

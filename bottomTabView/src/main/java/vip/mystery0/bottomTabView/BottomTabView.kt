@@ -14,10 +14,11 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import vip.mystery0.bottomTabView.util.DensityTools
+import java.util.ArrayList
 
 class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
 	private val inflater: LayoutInflater = LayoutInflater.from(context)
-	var list: List<BottomTabItem>? = null
+	var menuList = ArrayList<BottomTabItem>()
 	var config = BottomTabViewConfig()
 	var currentItem = 0
 		private set
@@ -57,8 +58,8 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 			throw NullPointerException("index must be less than $childCount")
 		val oldIndex = currentItem
 		val newIndex = index
-		val oldBottomTabItem = list!![oldIndex]
-		val newBottomTabItem = list!![newIndex]
+		val oldBottomTabItem = menuList[oldIndex]
+		val newBottomTabItem = menuList[newIndex]
 		oldBottomTabItem.isChecked = false
 		newBottomTabItem.isChecked = true
 		val oldTextView = getChildAt(oldIndex).findViewById<TextView>(R.id.textView)
@@ -70,13 +71,10 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		currentItem = index
 	}
 
-	fun setConfig(config: BottomTabViewConfig): BottomTabView {
-		this.config = config
-		return this
-	}
-
 	fun setMenuList(list: List<BottomTabItem>): BottomTabView {
-		this.list = list
+		menuList.clear()
+		menuList.addAll(list)
+		init()
 		return this
 	}
 
@@ -89,12 +87,21 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 	}
 
 	fun init() {
+		removeAllViews()
 		updateView()
 		setCheckedItem(currentItem)
 	}
 
+	fun findItem(index: Int): BottomTabItem {
+		if (index !in 0..childCount)
+			throw NullPointerException("index must be less than $childCount")
+		return menuList[index]
+	}
+
+	fun indexOf(bottomTabItem: BottomTabItem): Int = menuList.indexOf(bottomTabItem)
+
 	private fun updateView() {
-		list?.forEach {
+		menuList.forEach {
 			addView(createItemView(it))
 		}
 	}
@@ -105,7 +112,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 			DrawableCompat.setTint(drawable.mutate(), config.unSelectedColor)
 			return drawable
 		}
-		val size = DensityTools.dp2px(context, config.itemIconSize.toFloat())
+		val size = DensityTools.dp2px(context, config.itemIconSize)
 		val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
 		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
@@ -142,7 +149,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		textView.gravity = Gravity.CENTER
 		itemView.setOnClickListener {
 			val position = indexOfChild(it)
-			if (!list!![position].isChecked) {
+			if (!menuList[position].isChecked) {
 				setCheckedItem(position)
 				onItemSelectedListener?.onItemSelected(bottomTabItem)
 			}
