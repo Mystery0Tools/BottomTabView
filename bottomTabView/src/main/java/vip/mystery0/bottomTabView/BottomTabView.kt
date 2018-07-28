@@ -36,8 +36,16 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 			config.marginTop = typedArray.getDimension(R.styleable.BottomTabView_margin_top, config.marginTop)
 		if (typedArray.hasValue(R.styleable.BottomTabView_margin_bottom))
 			config.marginBottom = typedArray.getDimension(R.styleable.BottomTabView_margin_bottom, config.marginBottom)
+		if (typedArray.hasValue(R.styleable.BottomTabView_line_height))
+			config.lineHeight = typedArray.getDimension(R.styleable.BottomTabView_line_height, config.lineHeight)
 		if (typedArray.hasValue(R.styleable.BottomTabView_item_text_size))
 			config.itemTextSize = typedArray.getDimension(R.styleable.BottomTabView_item_text_size, config.itemTextSize)
+		if (typedArray.hasValue(R.styleable.BottomTabView_item_icon_size))
+			config.itemIconSize = typedArray.getDimension(R.styleable.BottomTabView_item_icon_size, config.itemIconSize)
+		if (typedArray.hasValue(R.styleable.BottomTabView_show_ripple))
+			config.isShowRipple = typedArray.getBoolean(R.styleable.BottomTabView_show_ripple, config.isShowRipple)
+		if (typedArray.hasValue(R.styleable.BottomTabView_show_gradient_colors))
+			config.isShowGradientColors = typedArray.getBoolean(R.styleable.BottomTabView_show_gradient_colors, config.isShowGradientColors)
 		typedArray.recycle()
 
 		orientation = LinearLayout.HORIZONTAL
@@ -115,11 +123,11 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
 	private fun createItemView(bottomTabItem: BottomTabItem): View {
 		val itemView = inflater.inflate(R.layout.layout_bottom_tab_item, null)
-		if (!config.isRippleShow)
+		if (!config.isShowRipple)
 			itemView.background = null
 		val line = itemView.findViewById<View>(R.id.line)
 		line.setBackgroundColor(config.lineColor)
-		val lineLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, config.lineHeight)
+		val lineLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, config.lineHeight.toInt())
 		line.layoutParams = lineLayoutParams
 		val frameLayoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
 		itemView.layoutParams = frameLayoutParams

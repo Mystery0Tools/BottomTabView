@@ -9,25 +9,26 @@ class BottomTabViewConfig {
 	@ColorInt
 	var unSelectedColor: Int = Color.BLUE
 
-	var marginTop: Float = 8f
-	var marginBottom: Float = 8f
+	var marginTop: Float = 8f//单位dp
+	var marginBottom: Float = 8f//单位dp
 	var itemTextSize = 14f//单位sp
-	var itemIconSize = 24//单位dp
+	var itemIconSize = 24f//单位dp
 
-	var lineHeight = 1//单位px
+	var lineHeight = 1f//单位px
 	@ColorInt
 	var lineColor = Color.parseColor("#e5e5e5")
 	@ColorInt
 	var gradientColors: IntArray = intArrayOf(Color.BLUE, Color.GREEN)
 
-	var isRippleShow = true//是否显示水波效果
+	var isShowGradientColors = false//是否显示渐变的图标色
+	var isShowRipple = true//是否显示水波效果
 
 	fun setSelectedColor(@ColorInt selectedColor: Int): BottomTabViewConfig {
 		this.selectedColor = selectedColor
 		return this
 	}
 
-	fun setUnSeletedColor(@ColorInt unSelectedColor: Int): BottomTabViewConfig {
+	fun setUnSelectedColor(@ColorInt unSelectedColor: Int): BottomTabViewConfig {
 		this.unSelectedColor = unSelectedColor
 		return this
 	}
@@ -47,20 +48,30 @@ class BottomTabViewConfig {
 		return this
 	}
 
-	fun setLineHeight(lineHeight: Int): BottomTabViewConfig {
+	fun setLineHeight(lineHeight: Float): BottomTabViewConfig {
 		this.lineHeight = lineHeight
 		return this
 	}
 
-	fun setItemIconSize(itemIconSize: Int): BottomTabViewConfig {
+	fun setItemIconSize(itemIconSize: Float): BottomTabViewConfig {
 		this.itemIconSize = itemIconSize
 		return this
 	}
 
 	fun setGradientColors(gradientColors: IntArray): BottomTabViewConfig {
-		if (gradientColors.size<2)
+		if (gradientColors.size < 2)
 			throw NumberFormatException("color size must be more than 1")
 		this.gradientColors = gradientColors
+		return this
+	}
+
+	fun isShowGradientColors(isShowGradientColors: Boolean): BottomTabViewConfig {
+		this.isShowGradientColors = isShowGradientColors
+		return this
+	}
+
+	fun isShowRipple(isShowRipple: Boolean): BottomTabViewConfig {
+		this.isShowRipple = isShowRipple
 		return this
 	}
 }

@@ -5,6 +5,10 @@
 		<attr name="unselected_color" format="reference|color" />
 		<attr name="margin_top" format="dimension" />
 		<attr name="margin_bottom" format="dimension" />
+		<attr name="line_height" format="dimension"/>
 		<attr name="item_text_size" format="dimension" />
+		<attr name="item_icon_size" format="dimension"/>
+		<attr name="show_ripple" format="boolean"/>
+		<attr name="show_gradient_colors" format="boolean"/>
 	</declare-styleable>
 </resources>
