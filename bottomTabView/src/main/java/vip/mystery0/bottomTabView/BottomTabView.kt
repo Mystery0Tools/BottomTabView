@@ -110,12 +110,12 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
 	private fun drawDrawable(bottomTabItem: BottomTabItem): Drawable? {
 		if (!bottomTabItem.isChecked) {
-			val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
+			val drawable = ContextCompat.getDrawable(context, bottomTabItem.unSelectedIcon)!!
 			DrawableCompat.setTint(drawable.mutate(), config.unSelectedColor)
 			return drawable
 		}
 		val size = DensityTools.dp2px(context, config.itemIconSize)
-		val drawable = ContextCompat.getDrawable(context, bottomTabItem.icon)!!
+		val drawable = ContextCompat.getDrawable(context, bottomTabItem.selectedIcon)!!
 		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
 		drawable.setBounds(0, 0, canvas.width, canvas.height)
