@@ -152,6 +152,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		val textView = itemView.findViewById<TextView>(R.id.textView)
 		textView.text = bottomTabItem.name
 		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.itemTextSize)
+		textView.setTextColor(config.unSelectedColor)
 		textView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(bottomTabItem), null, null)
 		textView.compoundDrawablePadding = config.iconMargin.toInt()
 		val textViewLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
