@@ -27,15 +27,11 @@ class MainActivity : AppCompatActivity() {
 		bottomTabView.config
 				.setSelectedColor(Color.BLACK)
 				.setUnSelectedColor(Color.BLUE)
-				.setMarginTop(16f)
-				.setMarginBottom(24f)
-				.setItemIconSize(24f)
-				.setItemTextSize(24f)
+				.setItemIconSize(16f)
 				.setLineHeight(1f)
 				.isShowRipple(true)
-				.isShowGradientColors(false)
-				.setGradientColors(intArrayOf(Color.WHITE, Color.BLACK))
-		bottomTabView.init()
+				.isShowGradientColors(true)
+				.setGradientColors(intArrayOf(Color.BLUE, Color.WHITE))
 		bottomTabView.setMenuList(menuList)
 		bottomTabView.setOnItemSelectedListener {
 			println(it.name)

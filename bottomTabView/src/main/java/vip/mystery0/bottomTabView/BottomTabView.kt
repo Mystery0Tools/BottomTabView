@@ -5,6 +5,7 @@ import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import vip.mystery0.bottomTabView.util.DensityTools
+import vip.mystery0.bottomTabView.util.ImageUtil
 import java.util.ArrayList
 
 class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
@@ -36,15 +38,17 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		if (typedArray.hasValue(R.styleable.BottomTabView_unselected_color))
 			config.unSelectedColor = typedArray.getColor(R.styleable.BottomTabView_unselected_color, config.unSelectedColor)
 		if (typedArray.hasValue(R.styleable.BottomTabView_margin_top))
-			config.marginTop = typedArray.getDimension(R.styleable.BottomTabView_margin_top, config.marginTop)
+			config.marginTop = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_margin_top, 0f))
 		if (typedArray.hasValue(R.styleable.BottomTabView_margin_bottom))
-			config.marginBottom = typedArray.getDimension(R.styleable.BottomTabView_margin_bottom, config.marginBottom)
+			config.marginBottom = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_margin_bottom, 0f))
 		if (typedArray.hasValue(R.styleable.BottomTabView_line_height))
-			config.lineHeight = typedArray.getDimension(R.styleable.BottomTabView_line_height, config.lineHeight)
+			config.lineHeight = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_line_height, 0f))
 		if (typedArray.hasValue(R.styleable.BottomTabView_item_text_size))
-			config.itemTextSize = typedArray.getDimension(R.styleable.BottomTabView_item_text_size, config.itemTextSize)
+			config.itemTextSize = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_item_text_size, config.itemTextSize))
 		if (typedArray.hasValue(R.styleable.BottomTabView_item_icon_size))
-			config.itemIconSize = typedArray.getDimension(R.styleable.BottomTabView_item_icon_size, config.itemIconSize)
+			config.itemIconSize = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_item_icon_size, 0f))
+		if (typedArray.hasValue(R.styleable.BottomTabView_icon_margin))
+			config.iconMargin = DensityTools.px2dp(context, typedArray.getDimension(R.styleable.BottomTabView_icon_margin, 0f))
 		if (typedArray.hasValue(R.styleable.BottomTabView_show_ripple))
 			config.isShowRipple = typedArray.getBoolean(R.styleable.BottomTabView_show_ripple, config.isShowRipple)
 		if (typedArray.hasValue(R.styleable.BottomTabView_show_gradient_colors))
@@ -109,25 +113,30 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 	}
 
 	private fun drawDrawable(bottomTabItem: BottomTabItem): Drawable? {
+		val size = DensityTools.dp2px(context, config.itemIconSize)
 		if (!bottomTabItem.isChecked) {
 			val drawable = ContextCompat.getDrawable(context, bottomTabItem.unSelectedIcon)!!
 			DrawableCompat.setTint(drawable.mutate(), config.unSelectedColor)
-			return drawable
+			return ImageUtil.zoomDrawable(context, drawable, size, size)
 		}
-		val size = DensityTools.dp2px(context, config.itemIconSize)
 		val drawable = ContextCompat.getDrawable(context, bottomTabItem.selectedIcon)!!
 		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
 		drawable.setBounds(0, 0, canvas.width, canvas.height)
 		drawable.draw(canvas)
-		val bitmapShader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-		//创建线性着色器并配置着色
-		val linearGradient = LinearGradient(size / 2f, 0f, size / 2f, size.toFloat(), config.gradientColors, null, Shader.TileMode.CLAMP)
-		val composeShader = ComposeShader(bitmapShader, linearGradient, PorterDuff.Mode.MULTIPLY)
-		val paint = Paint()
-		paint.shader = composeShader
-		canvas.drawRect(0f, 0f, size.toFloat(), size.toFloat(), paint)
-		return BitmapDrawable(context.resources, bitmap)
+		val scaleBitmap = ImageUtil.zoomBitmap(bitmap, size, size)
+		if (config.isShowGradientColors) {
+			val gradientCanvas = Canvas(scaleBitmap)
+			val bitmapShader = BitmapShader(scaleBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+			//创建线性着色器并配置着色
+			val linearGradient = LinearGradient(size / 2f, 0f, size / 2f, size, config.gradientColors, null, Shader.TileMode.CLAMP)
+			val composeShader = ComposeShader(bitmapShader, linearGradient, PorterDuff.Mode.MULTIPLY)
+			val paint = Paint()
+			paint.shader = composeShader
+			gradientCanvas.drawRect(0f, 0f, size, size, paint)
+		}
+		bitmap.recycle()
+		return BitmapDrawable(context.resources, scaleBitmap)
 	}
 
 	private fun createItemView(bottomTabItem: BottomTabItem): View {
@@ -142,10 +151,11 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		itemView.layoutParams = frameLayoutParams
 		val textView = itemView.findViewById<TextView>(R.id.textView)
 		textView.text = bottomTabItem.name
-		textView.textSize = config.itemTextSize
+		textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, config.itemTextSize)
 		textView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(bottomTabItem), null, null)
+		textView.compoundDrawablePadding = config.iconMargin.toInt()
 		val textViewLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT)
-		textViewLayoutParams.setMargins(0, DensityTools.dp2px(context, config.marginTop), 0, DensityTools.dp2px(context, config.marginBottom))
+		textViewLayoutParams.setMargins(0, DensityTools.dp2px(context, config.marginTop).toInt(), 0, DensityTools.dp2px(context, config.marginBottom).toInt())
 		textViewLayoutParams.gravity = Gravity.CENTER
 		textView.layoutParams = textViewLayoutParams
 		textView.gravity = Gravity.CENTER

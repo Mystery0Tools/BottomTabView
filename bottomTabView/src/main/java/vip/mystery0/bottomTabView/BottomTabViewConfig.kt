@@ -9,12 +9,13 @@ class BottomTabViewConfig {
 	@ColorInt
 	var unSelectedColor: Int = Color.BLUE
 
-	var marginTop: Float = 8f//单位dp
-	var marginBottom: Float = 8f//单位dp
+	var marginTop = 2f//单位dp
+	var marginBottom = 2f//单位dp
 	var itemTextSize = 14f//单位sp
 	var itemIconSize = 24f//单位dp
+	var iconMargin = 2f//图标间距,单位dp
 
-	var lineHeight = 1f//单位px
+	var lineHeight = 0.33f//单位dp
 	@ColorInt
 	var lineColor = Color.parseColor("#e5e5e5")
 	@ColorInt
