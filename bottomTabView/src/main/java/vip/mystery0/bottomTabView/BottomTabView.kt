@@ -19,7 +19,9 @@ import java.util.ArrayList
 class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : LinearLayout(context, attrs, defStyleAttr) {
 	private val inflater: LayoutInflater = LayoutInflater.from(context)
 	var menuList = ArrayList<BottomTabItem>()
+		private set
 	var config = BottomTabViewConfig()
+		private set
 	var currentItem = 0
 		private set
 	var onItemSelectedListener: OnItemSelectedListener? = null

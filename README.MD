@@ -69,13 +69,12 @@ menuList.add(new BottomTabItem("33133", R.drawable.ic_android_black_24dp));
 
 #### 设置菜单项
 ```java
-bottomTabView.setMenuList(menuList).init();
+bottomTabView.setMenuList(menuList);
 ```
-需要在设置之后调用一次 init 方法更新视图。
 
 #### 自定义配置
 ```java
-bottomTabView.setConfig(BottomTabViewConfig()
+bottomTabView.getConfig()
 	.setSelectedColor(Color.BLACK)//设置选中的条目颜色
 	.setUnSelectedColor(Color.BLUE)//设置未选中条目颜色
 	.setMarginTop(16f)//设置距离顶部间距，单位dp
@@ -85,8 +84,8 @@ bottomTabView.setConfig(BottomTabViewConfig()
 	.setLineHeight(1f)//设置顶部分割线高度，单位px
 	.isShowRipple(true)//是否显示点击时水波效果
 	.isShowGradientColors(false)//是否显示渐变图标（需要设置渐变的颜色数组）
-	.setGradientColors(new int[]{Color.WHITE, Color.BLACK}))//设置渐变颜色数组
-	.init();//更新视图
+	.setGradientColors(new int[]{Color.WHITE, Color.BLACK});//设置渐变颜色数组
+bottomTabView.init();//更新视图
 ```
 
 #### 自定义属性
@@ -114,6 +113,16 @@ bottomTabView.setOnItemSelectedListener(new BottomTabView.OnItemSelectedListener
 		//Do Something you want to do
 	}
 });
+```
+
+#### 通过index获取item实例
+```java
+bottomTabView.findItem(index);
+```
+
+#### 通过BottomTabItem对象获取对应的index
+```java
+bottomTabView.indexOf(BottomTabItem);
 ```
 
 ## LICENSE
