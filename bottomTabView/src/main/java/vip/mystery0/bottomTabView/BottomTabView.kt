@@ -117,7 +117,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 	/**
 	 * 设置链接的ViewPager
 	 */
-	fun linkViewPager(viewPager: ViewPager, listener: ((Int) -> Unit)?, isShowAnimationWhenClickItem: Boolean = true) {
+	fun linkViewPager(viewPager: ViewPager, listener: ((Int) -> Unit)?, isShowAnimationWhenClickItem: Boolean = true): BottomTabView {
 		setOnItemSelectedListener { viewPager.setCurrentItem(indexOf(it), isShowAnimationWhenClickItem) }
 		viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
 			override fun onPageScrollStateChanged(state: Int) {
@@ -131,6 +131,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 				listener?.invoke(position)
 			}
 		})
+		return this
 	}
 
 	/**
