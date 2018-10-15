@@ -12,8 +12,8 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.viewpager.widget.ViewPager
 import vip.mystery0.bottomTabView.util.DensityTools
 import vip.mystery0.bottomTabView.util.ImageUtil
 import java.util.ArrayList
@@ -59,11 +59,13 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		minimumHeight = 24
 	}
 
-	fun setCheckedItem(index: Int) {
-		if (index !in 0..childCount)
-			throw NullPointerException("index must be less than $childCount")
+	/**
+	 * 设置当前选中的项
+	 */
+	fun setCheckedItem(newIndex: Int) {
+		if (newIndex !in 0..childCount)
+			throw NullPointerException("newIndex must be less than $childCount")
 		val oldIndex = currentItem
-		val newIndex = index
 		val oldBottomTabItem = menuList[oldIndex]
 		val newBottomTabItem = menuList[newIndex]
 		oldBottomTabItem.isChecked = false
@@ -74,52 +76,108 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		val newTextView = getChildAt(newIndex).findViewById<TextView>(R.id.textView)
 		newTextView.setCompoundDrawablesWithIntrinsicBounds(null, drawDrawable(newBottomTabItem), null, null)
 		newTextView.setTextColor(config.selectedColor)
-		currentItem = index
+		currentItem = newIndex
 	}
 
+	/**
+	 * 设置菜单项列表
+	 */
 	fun setMenuList(list: List<BottomTabItem>): BottomTabView {
 		menuList.clear()
 		menuList.addAll(list)
-		init()
 		return this
 	}
 
-	fun setOnItemSelectedListener(listener: (BottomTabItem) -> Unit) {
+	/**
+	 * 设置配置信息
+	 * 尽量更改现有config对象，使用bottomTabView.getConfig()获取对应的config对象，这样子可以在保留在layout中自定义的属性值
+	 */
+	fun setConfig(config: BottomTabViewConfig): BottomTabView {
+		this.config = config
+		return this
+	}
+
+	fun config(listener: (BottomTabViewConfig) -> Unit): BottomTabView {
+		listener.invoke(config)
+		return this
+	}
+
+	/**
+	 * 设置监听器
+	 */
+	fun setOnItemSelectedListener(listener: (BottomTabItem) -> Unit): BottomTabView {
 		onItemSelectedListener = object : OnItemSelectedListener {
 			override fun onItemSelected(bottomTabItem: BottomTabItem) {
 				listener.invoke(bottomTabItem)
 			}
 		}
+		return this
 	}
 
+	/**
+	 * 设置链接的ViewPager
+	 */
+	fun linkViewPager(viewPager: ViewPager, listener: ((Int) -> Unit)?, isShowAnimationWhenClickItem: Boolean = true) {
+		setOnItemSelectedListener { viewPager.setCurrentItem(indexOf(it), isShowAnimationWhenClickItem) }
+		viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+			override fun onPageScrollStateChanged(state: Int) {
+			}
+
+			override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+			}
+
+			override fun onPageSelected(position: Int) {
+				setCheckedItem(position)
+				listener?.invoke(position)
+			}
+		})
+	}
+
+	/**
+	 * 必须在使用时显式调用init方法，否则不会更新界面的数据
+	 * 避免二次绘制同时确保在初始化时数据正常
+	 */
 	fun init() {
 		removeAllViews()
 		updateView()
 		setCheckedItem(currentItem)
 	}
 
+	/**
+	 * 获取对应位置的item对象
+	 */
 	fun findItem(index: Int): BottomTabItem {
 		if (index !in 0..childCount)
 			throw NullPointerException("index must be less than $childCount")
 		return menuList[index]
 	}
 
+	/**
+	 * 查询对应item的所在位置
+	 */
 	fun indexOf(bottomTabItem: BottomTabItem): Int = menuList.indexOf(bottomTabItem)
 
+	/**
+	 * 更新视图
+	 * 如果是因为数据更新之后需要更新界面，请调用 init 方法
+	 */
 	private fun updateView() {
 		menuList.forEach {
 			addView(createItemView(it))
 		}
 	}
 
+	/**
+	 * 根据配置项绘制对应位置的图标
+	 */
 	private fun drawDrawable(bottomTabItem: BottomTabItem): Drawable? {
 		val size = DensityTools.dp2px(context, config.itemIconSize)
-		if (!bottomTabItem.isChecked) {
-			val drawable = ContextCompat.getDrawable(context, bottomTabItem.unSelectedIcon)!!
+		if (!bottomTabItem.isChecked) {//如果是未选中的项，使用纯色填充
+			val drawable = bottomTabItem.getUnSelectedDrawable(context)
 			DrawableCompat.setTint(drawable.mutate(), config.unSelectedColor)
 			return ImageUtil.zoomDrawable(context, drawable, size, size)
 		}
-		val drawable = ContextCompat.getDrawable(context, bottomTabItem.selectedIcon)!!
+		val drawable = bottomTabItem.getSelectedDrawable(context)
 		val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, Bitmap.Config.ARGB_8888)
 		val canvas = Canvas(bitmap)
 		drawable.setBounds(0, 0, canvas.width, canvas.height)
@@ -139,6 +197,9 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		return BitmapDrawable(context.resources, scaleBitmap)
 	}
 
+	/**
+	 * 根据item对象获取对应位置绘制的view
+	 */
 	private fun createItemView(bottomTabItem: BottomTabItem): View {
 		val itemView = inflater.inflate(R.layout.layout_bottom_tab_item, null)
 		if (!config.isShowRipple)

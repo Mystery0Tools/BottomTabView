@@ -20,13 +20,17 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		app:icon_margin="4dp"
+		app:item_icon_size="16dp"
 		app:item_text_size="10sp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:margin_bottom="2dp"
-		app:margin_top="2dp"
+		app:line_height="1dp"
+		app:margin_bottom="8dp"
+		app:margin_top="8dp"
 		app:selected_color="@color/colorAccent"
+		app:show_gradient_colors="true"
+		app:show_ripple="true"
 		app:unselected_color="@color/colorPrimary" />
 
 	<Button
