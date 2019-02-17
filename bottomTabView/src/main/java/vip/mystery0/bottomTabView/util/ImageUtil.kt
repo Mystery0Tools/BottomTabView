@@ -8,7 +8,6 @@ import android.graphics.drawable.Drawable
 import android.graphics.PixelFormat
 import android.graphics.drawable.BitmapDrawable
 
-
 object ImageUtil {
 	fun zoomBitmap(bitmap: Bitmap, width: Float, height: Float): Bitmap {
 		val oldWidth = bitmap.width

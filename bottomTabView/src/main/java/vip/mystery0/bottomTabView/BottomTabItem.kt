@@ -35,7 +35,7 @@ class BottomTabItem {
 
 	fun getUnSelectedDrawable(context: Context): Drawable {
 		if (!::unSelectedDrawable.isInitialized)
-			unSelectedDrawable = ContextCompat.getDrawable(context, selectedIcon)!!
+			unSelectedDrawable = ContextCompat.getDrawable(context, unSelectedIcon)!!
 		return unSelectedDrawable
 	}
 }
