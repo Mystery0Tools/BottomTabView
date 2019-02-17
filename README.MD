@@ -1,42 +1,26 @@
 ## BottomTabView
-[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) [![GitHub release](https://img.shields.io/github/release/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/releases) ![GitHub Release Date](https://img.shields.io/github/release-date/Mystery0Tools/BottomTabView.svg) [![JitPack](https://img.shields.io/jitpack/v/Mystery0Tools/BottomTabView.svg)](https://jitpack.io/#Mystery0Tools/BottomTabView)
+[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) 
 
 
-**README：[中文](https://github.com/Mystery0Tools/BottomTabView/blob/master/README.MD "中文") | [English](https://github.com/Mystery0Tools/BottomTabView/blob/master/README_EN.MD "English")**
 ### Download
-通过Gradle集成：将以下代码添加进您的项目级的Build.gradle最后：
-```groovy
-    allprojects {
-    		repositories {
-    			...
-    			maven { url 'https://jitpack.io' }
-    		}
-    	}
-```
-然后添加依赖：
+[![GitHub release](https://img.shields.io/github/release/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/releases) ![GitHub Release Date](https://img.shields.io/github/release-date/Mystery0Tools/BottomTabView.svg)
+ 
+通过Gradle集成：
+在应用级的build.gradle中添加依赖：
 ```groovy
 	dependencies {
-	        implementation 'com.github.Mystery0Tools:BottomTabView:x.x.x'
+	        implementation 'vip.mystery0.tools:bottomtabview:x.x.x'
 	}
 ```
-或者通过Maven：添加Jitpack仓库到您的构建文件中：
-```xml
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
-```
-添加依赖：
+或者通过Maven：
 ```xml
 	<dependency>
-	    <groupId>com.github.Mystery0Tools</groupId>
-	    <artifactId>BottomTabView</artifactId>
-	    <version>x.x.x</version>
-	</dependency>
+      <groupId>vip.mystery0.tools</groupId>
+      <artifactId>bottomtabview</artifactId>
+      <version>x.x.x</version>
+      <type>pom</type>
+    </dependency>
 ```
-具体版本号请通过[Relase页面](https://github.com/Mystery0Tools/BottomTabView/releases "Relase页面")获取
 
 ### 具体效果
 ![](https://github.com/Mystery0Tools/BottomTabView/blob/master/resource/preview.gif)
