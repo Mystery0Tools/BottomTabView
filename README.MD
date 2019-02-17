@@ -1,5 +1,5 @@
 ## BottomTabView
-[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) 
+[![GitHub](https://img.shields.io/github/license/Mystery0Tools/BottomTabView.svg)](https://github.com/Mystery0Tools/BottomTabView/blob/master/LICENSE) [![Build Status](https://travis-ci.org/Mystery0Tools/BottomTabView.svg?branch=master)](https://travis-ci.org/Mystery0Tools/BottomTabView) 
 
 
 ### Download
