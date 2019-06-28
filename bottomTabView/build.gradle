@@ -2,11 +2,11 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-	compileSdkVersion 28
+	compileSdkVersion 29
 
 	defaultConfig {
 		minSdkVersion 18
-		targetSdkVersion 28
+		targetSdkVersion 29
 		versionCode 1
 		versionName POM_VERSION
 	}
@@ -14,7 +14,7 @@ android {
 
 dependencies {
 	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-	implementation 'androidx.appcompat:appcompat:1.0.2'
+	implementation 'androidx.appcompat:appcompat:1.1.0-beta01'
 }
 repositories {
 	mavenCentral()
