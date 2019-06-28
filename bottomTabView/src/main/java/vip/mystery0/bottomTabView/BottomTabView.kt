@@ -55,7 +55,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 			config.isShowGradientColors = typedArray.getBoolean(R.styleable.BottomTabView_show_gradient_colors, config.isShowGradientColors)
 		typedArray.recycle()
 
-		orientation = LinearLayout.HORIZONTAL
+		orientation = HORIZONTAL
 		minimumHeight = 24
 	}
 
@@ -209,7 +209,7 @@ class BottomTabView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 		line.setBackgroundColor(config.lineColor)
 		val lineLayoutParams = FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, config.lineHeight.toInt())
 		line.layoutParams = lineLayoutParams
-		val frameLayoutParams = LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+		val frameLayoutParams = LayoutParams(0, LayoutParams.WRAP_CONTENT, 1f)
 		itemView.layoutParams = frameLayoutParams
 		val textView = itemView.findViewById<TextView>(R.id.textView)
 		textView.text = bottomTabItem.name
